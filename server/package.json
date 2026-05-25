@@ -1,7 +1,7 @@
 {
-  "name": "praise-e-comm-server",
+  "name": "e-commerce-server",
   "version": "1.0.0",
-  "description": "Minimal Express backend for Praise e-comm demo",
+  "description": "Minimal Express backend for e.commerce demo",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"
