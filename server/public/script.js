@@ -8,7 +8,9 @@ const appConfig = {
     currencyLabel: 'Ksh',
     imageFallback: 'uploads/womens_handbag.jpg',
     useBackend: true,
-    backendUrl: 'http://localhost:3000'
+    // Automatically switches between local and production environment
+    backendUrl: window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
+                ? 'http://localhost:3000' : '' 
 };
 
 const feedbackKey = 'customerFeedback';
