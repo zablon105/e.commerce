@@ -222,6 +222,7 @@ function saveUserItems(){
 function toggleEditMode(productId, isUserItem, active){
     const list = isUserItem ? userItems : products;
     list.forEach(item => {
+        if(!item) return;
         item.editing = item.id === productId ? active : false;
     });
 }
@@ -401,7 +402,7 @@ function renderProducts(){
     }
 
     filteredProducts.forEach((product) => {
-        const isUserItem = userItems.includes(product);
+        const isUserItem = userItems.some(u => u && u.id === product.id);
         const productCard = document.createElement('div');
         productCard.className = isUserItem ? 'product user-item badge' : 'product';
 
@@ -640,7 +641,7 @@ function deleteProduct(productId, confirmed){
     const ownerArea = document.getElementById('owner-section');
     const existing = document.getElementById('remove-confirm');
     if(confirmed){
-        const index = products.findIndex(p => p.id === productId);
+        const index = products.findIndex(p => p && p.id === productId);
         if(index === -1) return;
         const removed = products.splice(index, 1)[0];
         const undoRestoration = async () => {
