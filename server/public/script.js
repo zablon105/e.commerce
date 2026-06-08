@@ -6,12 +6,23 @@ let selectedImageFile = null;
 const appConfig = {
     ownerPasscode: 'owner123',
     currencyLabel: 'Ksh',
-    imageFallback: 'uploads/womens_handbag.jpg',
+    imageFallback: '/uploads/womens_handbag.jpg',
     useBackend: true,
     // Automatically switches between local and production environment
     backendUrl: window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
                 ? 'http://localhost:3000' : '' 
 };
+
+function normalizeImagePath(src){
+    if(!src || typeof src !== 'string') return src;
+
+    const trimmed = src.trim();
+    if(trimmed.startsWith('/uploads/')) return trimmed;
+    if(trimmed.startsWith('uploads/')) return `/${trimmed}`;
+    if(trimmed.startsWith('./uploads/')) return `/${trimmed.replace(/^\.\//,'')}`;
+
+    return trimmed;
+}
 
 const feedbackKey = 'customerFeedback';
 let isOwner = localStorage.getItem('isOwner') === 'true';
@@ -280,7 +291,7 @@ function cancelEditProduct(productId, isUserItem){
 }
 
 function preloadImages(){
-    const imageSources = [...products.map(p => p.image), ...userItems.map(i => i.image)];
+    const imageSources = [...products.map(p => normalizeImagePath(p.image)), ...userItems.map(i => normalizeImagePath(i.image))];
     imageSources.forEach(src => {
         const img = new Image();
         img.onload = () => {};
