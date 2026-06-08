@@ -265,6 +265,13 @@ section,
     background: #ef4444;
     color: white;
     font-weight: 700;
+    border: none;
+}
+
+.remove-cart-btn{
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
 }
 
 .cart h3 {

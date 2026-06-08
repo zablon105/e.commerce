@@ -15,13 +15,14 @@
 </header>
 
 <section class="product-detail">
-    <img id="product-image" alt="Product image" loading="eager" onerror="this.src='uploads/womens_handbag.jpg'">
+    <img id="product-image" alt="Product image" loading="eager" onerror="this.src='/uploads/womens_handbag.jpg'">
 
     <div class="product-info">
         <h2 id="product-name"></h2>
         <p id="product-category"></p>
-        <h3>Ksh <span id="product-price"></span></h3>
-        <button onclick="addToCartFromDetail()">Add to Cart</button>
+        <h3 class="product-price">Ksh <span id="product-price"></span></h3>
+        <p class="product-badge" id="product-badge">Premium selection</p>
+        <button class="add-to-cart-btn" onclick="addToCartFromDetail()">Add to Cart</button>
     </div>
 </section>
 
