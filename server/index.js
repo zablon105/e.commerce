@@ -8,8 +8,11 @@ const app = express();
 app.use(cors());
 app.use(express.json({ limit: '5mb' }));
 
-// Serve static files from public folder
+// Serve static files
 app.use(express.static(path.join(__dirname, 'public')));
+// Serve uploaded product images from the repo-level /uploads folder
+app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads')));
+
 
 // Home page
 app.get('/', (req, res) => {
