@@ -1,4 +1,4 @@
-Minimal Express server to hold products and feedback for the Praise demo.
+Minimal Express server to hold products and feedback for the e.commerce demo.
 
 To run:
 
