@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>e.commerce | Premium Merchandise</title>
+<link rel="stylesheet" href="style.css">
+<!-- Font Awesome Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+</head>
+
+<body>
+
+<header class="navbar">
+    <div class="logo-container">
+        <div class="logo">e.commerce</div>
+    </div>
+
+    <div class="search-wrapper">
+        <label for="search-input" class="sr-only">Search products</label>
+        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+        <input id="search-input" type="text" placeholder="Search products..." class="search"
+            onkeyup="searchProducts(this.value)">
+    </div>
+
+    <div class="nav-right">
+        <button class="filter-btn active" data-gender="all" data-category="all" onclick="filterProducts('all','all')">All</button>
+        <button class="filter-btn" data-gender="female" data-category="all" onclick="filterProducts('female','all')">Female</button>
+        <button class="filter-btn" data-gender="male" data-category="all" onclick="filterProducts('male','all')">Male</button>
+        
+        <button id="theme-toggle" class="theme-btn" onclick="toggleTheme()" aria-label="Toggle light/dark theme">
+            <i class="fa-solid fa-moon"></i>
+        </button>
+
+        <button id="cart-button" type="button" class="cart-icon" onclick="toggleCart(true)" aria-label="View cart, 0 items">
+            <i class="fa-solid fa-cart-shopping"></i> <span id="cart-count" aria-hidden="true">0</span>
+        </button>
+    </div>
+</header>
+
+<main>
+
+<section class="hero">
+    <h1>Discover <span>Premium Fashion</span> & Lifestyle Essentials</h1>
+    <p>Explore curated footwear, bedding, handbags, and more with effortless shopping and secure checkout.</p>
+    <div class="hero-features">
+        <span class="feature-tag"><i class="fa-solid fa-truck"></i> Free Shipping</span>
+        <span class="feature-tag"><i class="fa-solid fa-shield-halved"></i> Secure Checkout</span>
+        <span class="feature-tag"><i class="fa-solid fa-rotate-left"></i> Easy Returns</span>
+    </div>
+</section>
+
+<section class="categories">
+    <button class="category-btn active" data-gender="all" data-category="all" onclick="filterProducts('all','all')">All Products</button>
+    <button class="category-btn" data-gender="female" data-category="shoes" onclick="filterProducts('female','shoes')">Women's Footwear</button>
+    <button class="category-btn" data-gender="female" data-category="beddings" onclick="filterProducts('female','beddings')">Bedding Collection</button>
+    <button class="category-btn" data-gender="female" data-category="handbags" onclick="filterProducts('female','handbags')">Designer Handbags</button>
+    <button class="category-btn" data-gender="male" data-category="shoes" onclick="filterProducts('male','shoes')">Men's Footwear</button>
+</section>
+
+<div class="products-wrapper">
+    <h2 class="sr-only">Product Catalog</h2>
+    <section id="products" class="products"></section>
+</div>
+
+<section id="upload-section" class="upload-section">
+    <h2>Manage Inventory</h2>
+    <div class="owner-access">
+        <p>Only the store owner may add or manage listings.</p>
+        <div class="owner-login">
+            <label for="owner-password">Owner passcode</label>
+            <input type="password" id="owner-password" placeholder="Owner passcode" class="input-field">
+            <button type="button" class="owner-btn" onclick="authenticateOwner()">Unlock Manager Access</button>
+            <button type="button" id="owner-signout" class="owner-btn owner-signout" onclick="signOutOwner()">Sign Out</button>
+        </div>
+        <p id="owner-status" class="owner-status">Not authenticated.</p>
+    </div>
+
+    <div id="owner-section" class="owner-section">
+        <div class="owner-management-header">
+            <h3>Inventory Management Dashboard</h3>
+            <p>Add new products, import CSV data, and modify catalog listings.</p>
+        </div>
+        
+        <!-- Dashboard Tabs -->
+        <div class="dashboard-tabs">
+            <button type="button" class="tab-btn active" onclick="switchTab('add-tab')">Add New Item</button>
+            <button type="button" class="tab-btn" onclick="switchTab('csv-tab')">Bulk CSV Import</button>
+            <button type="button" class="tab-btn" onclick="switchTab('listings-tab')">Manage Custom Listings</button>
+        </div>
+        
+        <!-- Add Item Tab -->
+        <div id="add-tab" class="tab-content active">
+            <div class="upload-form">
+                <div class="form-group">
+                    <label for="upload-name">Item name</label>
+                    <input type="text" id="upload-name" placeholder="Item name" class="input-field">
+                </div>
+                <div class="form-group">
+                    <label for="upload-price">Item price (Ksh, 850–2200)</label>
+                    <input type="number" id="upload-price" placeholder="Price (Ksh)" class="input-field">
+                </div>
+                <div class="form-group">
+                    <label for="upload-gender">Gender</label>
+                    <select id="upload-gender" class="input-field">
+                        <option value="female">Female</option>
+                        <option value="male">Male</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="upload-category">Category</label>
+                    <select id="upload-category" class="input-field">
+                        <option value="shoes">Shoes</option>
+                        <option value="beddings">Beddings</option>
+                        <option value="handbags">Handbags</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                
+                <div class="form-group file-input-wrapper">
+                    <label class="file-input">
+                        <i class="fa-regular fa-image" style="font-size: 1.5rem; margin-bottom: 6px;"></i>
+                        <span>Choose Image File</span>
+                        <input type="file" id="upload-image" accept="image/*" class="hidden-input">
+                    </label>
+                    <div id="file-name"></div>
+                </div>
+                
+                <button onclick="uploadItem()" class="upload-btn"><i class="fa-solid fa-plus"></i> Add Item to catalog</button>
+                <p id="upload-status" class="upload-status"></p>
+            </div>
+        </div>
+        
+        <!-- CSV Import Tab -->
+        <div id="csv-tab" class="tab-content">
+            <div class="csv-import">
+                <label for="csv-file" class="csv-label">Select Bulk import (CSV):</label>
+                <div class="csv-import-row">
+                    <input type="file" id="csv-file" accept=".csv" class="input-field">
+                    <button type="button" class="owner-btn" onclick="importCSV()"><i class="fa-solid fa-file-import"></i> Import CSV</button>
+                </div>
+                <p id="csv-status" class="upload-status"></p>
+            </div>
+        </div>
+        
+        <!-- Listings Tab -->
+        <div id="listings-tab" class="tab-content">
+            <h3 id="user-items-title" class="hidden-title">Your Active Custom Listings</h3>
+            <div id="user-items" class="user-items"></div>
+        </div>
+    </div>
+</section>
+
+<section id="feedback-section" class="feedback-section">
+    <h2>Customer Feedback</h2>
+    <p>Let us know how we can improve your shopping experience. We review all responses daily.</p>
+    <textarea id="feedback-message" class="feedback-input" placeholder="Type your feedback here..."></textarea>
+    <button type="button" class="upload-btn" onclick="submitFeedback()"><i class="fa-regular fa-paper-plane"></i> Send Feedback</button>
+    <p id="feedback-status" class="feedback-status"></p>
+</section>
+
+</main>
+
+<!-- Slide-out Side Cart Drawer -->
+<div id="cart-drawer-overlay" class="cart-drawer-overlay" onclick="toggleCart(false)"></div>
+<aside id="cart-drawer" class="cart-drawer" aria-label="Shopping Cart">
+    <div class="cart-drawer-header">
+        <h2>Your Cart</h2>
+        <button class="close-drawer-btn" onclick="toggleCart(false)" aria-label="Close cart"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="cart-drawer-body">
+        <ul id="cart-drawer-items" class="cart-drawer-items"></ul>
+        <div id="cart-drawer-empty" class="empty">
+            <i class="fa-solid fa-basket-shopping" style="font-size: 3rem; color: var(--text-muted); margin-bottom: 12px; display: block;"></i>
+            No items in your cart yet.
+        </div>
+    </div>
+    <div class="cart-drawer-footer">
+        <div class="cart-summary-row">
+            <span>Subtotal:</span>
+            <span>Ksh <span id="cart-drawer-total">0</span></span>
+        </div>
+        <button onclick="checkoutCart()" class="checkout-btn"><i class="fa-solid fa-credit-card"></i> Checkout Now</button>
+    </div>
+</aside>
+
+<!-- Quick View Modal -->
+<div id="quickview-modal" class="modal-overlay" onclick="closeQuickView(event)" role="dialog" aria-modal="true" aria-labelledby="qv-name">
+    <div class="modal-container">
+        <button class="modal-close" onclick="toggleQuickView(false)" aria-label="Close modal"><i class="fa-solid fa-xmark"></i></button>
+        <div class="modal-body">
+            <div class="modal-image-wrapper">
+                <img id="qv-image" src="" alt="Product Image">
+            </div>
+            <div class="modal-details">
+                <h2 id="qv-name" class="modal-title">Product Details</h2>
+                <div class="rating-stars" id="qv-rating"></div>
+                <div id="qv-price" class="modal-price"></div>
+                <p id="qv-desc" class="modal-desc"></p>
+                <div class="modal-specs">
+                    <span id="qv-category-badge" class="modal-spec-badge"></span>
+                    <span id="qv-gender-badge" class="modal-spec-badge"></span>
+                    <span class="modal-spec-badge"><i class="fa-solid fa-truck"></i> Free Shipping</span>
+                </div>
+                <button id="qv-add-btn" class="checkout-btn"><i class="fa-solid fa-cart-plus"></i> Add to Cart</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="script.js"></script>
+<div id="toast-container" role="region" aria-live="polite" aria-label="Notifications"></div>
+
+</body>
+</html>

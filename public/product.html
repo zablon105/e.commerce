@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>e.commerce | Product Detail</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header class="navbar">
+    <div class="logo">e.commerce</div>
+    <a class="back-link" href="index.html">← Back to Store</a>
+</header>
+
+<section class="product-detail">
+    <img id="product-image" alt="Product image" loading="eager" onerror="this.src='/uploads/womens_handbag.jpg'">
+
+    <div class="product-info">
+        <h2 id="product-name"></h2>
+        <p id="product-category"></p>
+        <h3 class="product-price">Ksh <span id="product-price"></span></h3>
+        <p class="product-badge" id="product-badge">Premium selection</p>
+        <button class="add-to-cart-btn" onclick="addToCartFromDetail()">Add to Cart</button>
+    </div>
+</section>
+
+<script>
+const product = JSON.parse(localStorage.getItem("selectedProduct")) || {name:'Unknown', price:0, category:'', image:'https://via.placeholder.com/300?text=No+Image'};
+
+document.getElementById("product-name").textContent = product.name;
+document.getElementById("product-price").textContent = product.price;
+document.getElementById("product-category").textContent = product.category ? `Category: ${product.category}` : '';
+document.getElementById("product-image").src = product.image;
+
+defaultCart = JSON.parse(localStorage.getItem("cart")) || [];
+
+function addToCartFromDetail() {
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+    let item = cart.find(p => p.name === product.name);
+
+    if(item){
+        item.quantity++;
+    } else {
+        cart.push({name: product.name, price: product.price, quantity:1});
+    }
+
+    localStorage.setItem("cart", JSON.stringify(cart));
+    alert("Added to cart!");
+}
+</script>
+
+</body>
+</html>
