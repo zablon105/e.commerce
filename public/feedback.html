@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>e.commerce | Customer Feedback</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="brand-group">
+    <div class="logo">e.commerce</div>
+    <p class="brand-tag">Customer feedback</p>
+  </div>
+  <a class="back-link" href="index.html"><i class="fas fa-arrow-left"></i> Back to Store</a>
+</header>
+<main class="page-shell">
+  <section class="feedback-panel">
+    <div class="section-title-row">
+      <div>
+        <h1>Share your experience</h1>
+        <p>Your feedback helps us improve service, products, and the shopping journey.</p>
+      </div>
+    </div>
+    <textarea id="feedback-message" class="feedback-input" placeholder="Type your feedback here..."></textarea>
+    <button type="button" class="upload-btn" onclick="submitFeedback()">Send feedback</button>
+    <p id="feedback-status" class="feedback-status"></p>
+  </section>
+</main>
+<div id="toast-container" aria-live="polite"></div>
+<script src="js/script.js"></script>
+</body>
+</html>

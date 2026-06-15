@@ -24,6 +24,9 @@
     <button id="theme-toggle" type="button" class="theme-toggle-btn" onclick="toggleTheme()" aria-label="Toggle theme">
       <i class="fas fa-moon"></i>
     </button>
+    <button id="feedback-button" type="button" class="theme-toggle-btn" onclick="scrollToFeedback()" aria-label="Customer feedback">
+      <i class="fas fa-comment-dots"></i>
+    </button>
     <button id="cart-button" type="button" class="cart-icon" onclick="scrollToCart()" aria-label="View cart, 0 items">
       <i class="fas fa-shopping-cart"></i>
       <span id="cart-count">0</span>
@@ -129,17 +132,6 @@
     </div>
   </section>
 
-  <section id="feedback-section" class="feedback-panel">
-    <div class="section-title-row">
-      <div>
-        <h2>Customer feedback</h2>
-        <p>Share suggestions so we can improve the shopping experience.</p>
-      </div>
-    </div>
-    <textarea id="feedback-message" class="feedback-input" placeholder="Type your feedback here..."></textarea>
-    <button type="button" class="upload-btn" onclick="submitFeedback()">Send feedback</button>
-    <p id="feedback-status" class="feedback-status"></p>
-  </section>
 </main>
 
 <div id="toast-container" aria-live="polite"></div>

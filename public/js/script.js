@@ -468,6 +468,10 @@ function scrollToCart(){
     window.location.href = 'cart.html';
 }
 
+function scrollToFeedback(){
+    window.location.href = 'feedback.html';
+}
+
 function searchProducts(query){
     state.query = query;
     renderProducts();
@@ -890,6 +894,12 @@ function displayUserItems(){
 
 // Initialize asynchronously (load backend products if configured)
 (async function init(){
+    // Reset localStorage products on first load to ensure fresh defaults
+    if (!localStorage.getItem('productsInitialized')) {
+        localStorage.removeItem('products');
+        localStorage.setItem('productsInitialized', 'true');
+    }
+    
     initTheme();
     products = await loadProducts();
     preloadImages();
