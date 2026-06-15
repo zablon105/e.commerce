@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>e.commerce | Product Detail</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
 <link rel="stylesheet" href="css/style.css">
 </head>
@@ -13,7 +15,12 @@
     <div class="logo">e.commerce</div>
     <p class="brand-tag">Product detail</p>
   </div>
-  <a class="back-link" href="index.html"><i class="fas fa-arrow-left"></i> Back to Store</a>
+  <div class="header-actions">
+    <button id="theme-toggle" type="button" class="theme-toggle-btn" onclick="toggleTheme()" aria-label="Toggle theme">
+      <i class="fas fa-moon"></i>
+    </button>
+    <a class="back-link" href="index.html"><i class="fas fa-arrow-left"></i> Back to Store</a>
+  </div>
 </header>
 <main class="page-shell">
   <section class="product-detail-panel">
@@ -53,6 +60,41 @@ function addToCartFromDetail() {
     localStorage.setItem('cart', JSON.stringify(cart));
     window.location.href = 'cart.html';
 }
+
+/* Theme switching helper for product details page */
+function initTheme() {
+    const savedTheme = localStorage.getItem('theme');
+    const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    if (savedTheme === 'dark' || (!savedTheme && systemPrefersDark)) {
+        document.body.classList.add('dark');
+        updateThemeToggleIcon(true);
+    } else {
+        document.body.classList.add('light');
+        updateThemeToggleIcon(false);
+    }
+}
+function toggleTheme() {
+    const isDark = document.body.classList.contains('dark');
+    if (isDark) {
+        document.body.classList.remove('dark');
+        document.body.classList.add('light');
+        localStorage.setItem('theme', 'light');
+        updateThemeToggleIcon(false);
+    } else {
+        document.body.classList.remove('light');
+        document.body.classList.add('dark');
+        localStorage.setItem('theme', 'dark');
+        updateThemeToggleIcon(true);
+    }
+}
+function updateThemeToggleIcon(isDark) {
+    const themeIcon = document.querySelector('.theme-toggle-btn i');
+    if (themeIcon) {
+        themeIcon.className = isDark ? 'fas fa-sun' : 'fas fa-moon';
+    }
+}
+
+initTheme();
 </script>
 </body>
 </html>

@@ -436,8 +436,10 @@ function renderProducts(){
             <h3>${product.name}</h3>
             <p>${appConfig.currencyLabel} ${product.price}</p>
             <p class="meta">${capitalize(product.gender)} · ${capitalize(product.category)}</p>
-            <button onclick="addToCart('${product.name}', ${product.price})">Add to Cart</button>
-            <button onclick='viewProduct(${JSON.stringify(product)})'>View</button>
+            <div class="card-actions-row">
+                <button onclick="addToCart('${product.name.replace(/'/g, "\\'")}', ${product.price})">Add to Cart</button>
+                <button onclick="viewProductById('${product.id}')">View</button>
+            </div>
             ${isUserItem ? `<button class="remove-item-btn full-width-btn" onclick="removeUserItem(${userItems.indexOf(product)})">Remove</button>` : isOwner ? `<button class="remove-item-btn full-width-btn" onclick="deleteProduct('${product.id}', ${isUserItem})">Remove</button>` : ''}
             ${editControls}
         `;
@@ -489,6 +491,57 @@ function setActiveButtons(){
 function viewProduct(product){
     localStorage.setItem("selectedProduct", JSON.stringify(product));
     window.location.href = "product.html";
+}
+
+function viewProductById(productId){
+    const allProducts = [...products, ...userItems];
+    const product = allProducts.find(p => p.id === productId);
+    if(product){
+        localStorage.setItem("selectedProduct", JSON.stringify(product));
+        window.location.href = "product.html";
+    }
+}
+
+// Theme management
+function initTheme() {
+    const savedTheme = localStorage.getItem('theme');
+    const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    
+    if (savedTheme === 'dark' || (!savedTheme && systemPrefersDark)) {
+        document.body.classList.add('dark');
+        document.body.classList.remove('light');
+        updateThemeToggleIcon(true);
+    } else {
+        document.body.classList.add('light');
+        document.body.classList.remove('dark');
+        updateThemeToggleIcon(false);
+    }
+}
+
+function toggleTheme() {
+    const isDark = document.body.classList.contains('dark');
+    if (isDark) {
+        document.body.classList.remove('dark');
+        document.body.classList.add('light');
+        localStorage.setItem('theme', 'light');
+        updateThemeToggleIcon(false);
+    } else {
+        document.body.classList.remove('light');
+        document.body.classList.add('dark');
+        localStorage.setItem('theme', 'dark');
+        updateThemeToggleIcon(true);
+    }
+}
+
+function updateThemeToggleIcon(isDark) {
+    const themeIcon = document.querySelector('.theme-toggle-btn i');
+    if (themeIcon) {
+        if (isDark) {
+            themeIcon.className = 'fas fa-sun';
+        } else {
+            themeIcon.className = 'fas fa-moon';
+        }
+    }
 }
 
 function capitalize(text){
@@ -837,6 +890,7 @@ function displayUserItems(){
 
 // Initialize asynchronously (load backend products if configured)
 (async function init(){
+    initTheme();
     products = await loadProducts();
     preloadImages();
     renderProducts();

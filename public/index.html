@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>e.commerce | Premium Merchandise</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
 <link rel="stylesheet" href="css/style.css">
 </head>
@@ -19,6 +21,9 @@
       <input id="search-input" type="text" placeholder="Search the collection" class="search" onkeyup="searchProducts(this.value)">
       <button class="search-clear" type="button" onclick="document.getElementById('search-input').value=''; searchProducts('')" aria-label="Clear search"><i class="fas fa-times"></i></button>
     </div>
+    <button id="theme-toggle" type="button" class="theme-toggle-btn" onclick="toggleTheme()" aria-label="Toggle theme">
+      <i class="fas fa-moon"></i>
+    </button>
     <button id="cart-button" type="button" class="cart-icon" onclick="scrollToCart()" aria-label="View cart, 0 items">
       <i class="fas fa-shopping-cart"></i>
       <span id="cart-count">0</span>

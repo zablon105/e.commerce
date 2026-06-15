@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>e.commerce | Cart</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
 <link rel="stylesheet" href="css/style.css">
 </head>
@@ -13,7 +15,12 @@
     <div class="logo">e.commerce</div>
     <p class="brand-tag">Your cart summary</p>
   </div>
-  <a class="back-link" href="index.html"><i class="fas fa-arrow-left"></i> Back to Store</a>
+  <div class="header-actions">
+    <button id="theme-toggle" type="button" class="theme-toggle-btn" onclick="toggleTheme()" aria-label="Toggle theme">
+      <i class="fas fa-moon"></i>
+    </button>
+    <a class="back-link" href="index.html"><i class="fas fa-arrow-left"></i> Back to Store</a>
+  </div>
 </header>
 <main class="page-shell">
   <section class="cart-panel page-panel">
@@ -29,9 +36,35 @@
       <span>Total</span>
       <strong>Ksh <span id="total">0</span></strong>
     </div>
-    <button class="checkout-btn" type="button">Proceed to Checkout</button>
+    <button class="checkout-btn" type="button" onclick="openCheckoutModal()">Proceed to Checkout</button>
   </section>
 </main>
+
+<!-- Checkout Modal Overlay -->
+<div id="checkout-modal" class="modal-overlay">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>Complete Order</h2>
+      <p>Please enter your details to finalize your purchase.</p>
+    </div>
+    <form id="checkout-form" class="modal-form" onsubmit="event.preventDefault(); submitCheckout();">
+      <label for="customer-name">
+        Full Name
+        <input type="text" id="customer-name" placeholder="John Doe" class="input-field" required>
+      </label>
+      <label for="customer-email">
+        Email Address
+        <input type="email" id="customer-email" placeholder="john@example.com" class="input-field" required>
+      </label>
+      <div id="checkout-error" class="upload-status" style="color: var(--danger); margin-top: 4px; display: none;"></div>
+      <div class="modal-actions">
+        <button type="button" class="modal-cancel-btn" onclick="closeCheckoutModal()">Cancel</button>
+        <button type="submit" class="checkout-btn" style="margin-top: 0;">Submit Order</button>
+      </div>
+    </form>
+  </div>
+</div>
+
 <script>
 const currencyLabel = 'Ksh';
 let cart = JSON.parse(localStorage.getItem('cart')) || [];
@@ -40,16 +73,19 @@ function renderCart(){
     const cartItemsEl = document.getElementById('cart-items');
     const totalEl = document.getElementById('total');
     const emptyEl = document.getElementById('cart-empty');
+    const checkoutBtn = document.querySelector('.cart-panel .checkout-btn');
 
     cartItemsEl.innerHTML = '';
 
     if(cart.length === 0){
         emptyEl.hidden = false;
         totalEl.textContent = '0';
+        if (checkoutBtn) checkoutBtn.style.display = 'none';
         return;
     }
 
     emptyEl.hidden = true;
+    if (checkoutBtn) checkoutBtn.style.display = 'block';
 
     let total = 0;
     cart.forEach(item => {
@@ -64,7 +100,7 @@ function renderCart(){
         actions.className = 'cart-item-actions';
 
         const removeBtn = document.createElement('button');
-        removeBtn.innerHTML = '<i class="fas fa-trash"></i> Remove';
+        removeBtn.innerHTML = '<i class="fas fa-trash"></i>';
         removeBtn.className = 'remove-cart-btn';
         removeBtn.type = 'button';
         removeBtn.onclick = () => removeFromCart(item.name);
@@ -86,6 +122,145 @@ function removeFromCart(name){
     renderCart();
 }
 
+/* Theme switching helper for cart page */
+function initTheme() {
+    const savedTheme = localStorage.getItem('theme');
+    const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    if (savedTheme === 'dark' || (!savedTheme && systemPrefersDark)) {
+        document.body.classList.add('dark');
+        updateThemeToggleIcon(true);
+    } else {
+        document.body.classList.add('light');
+        updateThemeToggleIcon(false);
+    }
+}
+function toggleTheme() {
+    const isDark = document.body.classList.contains('dark');
+    if (isDark) {
+        document.body.classList.remove('dark');
+        document.body.classList.add('light');
+        localStorage.setItem('theme', 'light');
+        updateThemeToggleIcon(false);
+    } else {
+        document.body.classList.remove('light');
+        document.body.classList.add('dark');
+        localStorage.setItem('theme', 'dark');
+        updateThemeToggleIcon(true);
+    }
+}
+function updateThemeToggleIcon(isDark) {
+    const themeIcon = document.querySelector('.theme-toggle-btn i');
+    if (themeIcon) {
+        themeIcon.className = isDark ? 'fas fa-sun' : 'fas fa-moon';
+    }
+}
+
+/* Checkout Modal Actions */
+function openCheckoutModal() {
+    if (cart.length === 0) {
+        return;
+    }
+    const modal = document.getElementById('checkout-modal');
+    modal.classList.add('active');
+}
+
+function closeCheckoutModal() {
+    const modal = document.getElementById('checkout-modal');
+    modal.classList.remove('active');
+    setTimeout(() => {
+        restoreModalForm();
+    }, 300);
+}
+
+function restoreModalForm() {
+    const modalContent = document.querySelector('.modal-content');
+    modalContent.innerHTML = `
+      <div class="modal-header">
+        <h2>Complete Order</h2>
+        <p>Please enter your details to finalize your purchase.</p>
+      </div>
+      <form id="checkout-form" class="modal-form" onsubmit="event.preventDefault(); submitCheckout();">
+        <label for="customer-name">
+          Full Name
+          <input type="text" id="customer-name" placeholder="John Doe" class="input-field" required>
+        </label>
+        <label for="customer-email">
+          Email Address
+          <input type="email" id="customer-email" placeholder="john@example.com" class="input-field" required>
+        </label>
+        <div id="checkout-error" class="upload-status" style="color: var(--danger); margin-top: 4px; display: none;"></div>
+        <div class="modal-actions">
+          <button type="button" class="modal-cancel-btn" onclick="closeCheckoutModal()">Cancel</button>
+          <button type="submit" class="checkout-btn" style="margin-top: 0;">Submit Order</button>
+        </div>
+      </form>
+    `;
+}
+
+async function submitCheckout() {
+    const nameInput = document.getElementById('customer-name');
+    const emailInput = document.getElementById('customer-email');
+    const errorDiv = document.getElementById('checkout-error');
+    
+    const name = nameInput.value.trim();
+    const email = emailInput.value.trim();
+    
+    if (!name || !email) {
+        errorDiv.textContent = "Please fill in all fields.";
+        errorDiv.style.display = "block";
+        return;
+    }
+    
+    const submitBtn = document.querySelector('#checkout-form button[type="submit"]');
+    const originalBtnText = submitBtn.textContent;
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Processing...";
+    
+    try {
+        const backendUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
+                    ? 'http://localhost:3000' : '';
+                    
+        const response = await fetch(`${backendUrl}/api/orders`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                cart: cart.map(item => ({ name: item.name, price: item.price, quantity: item.quantity })),
+                customer: { name, email }
+            })
+        });
+        
+        if (!response.ok) {
+            throw new Error(`Order failed: ${response.status}`);
+        }
+        
+        const order = await response.json();
+        
+        cart = [];
+        localStorage.setItem('cart', JSON.stringify(cart));
+        renderCart();
+        
+        const modalContent = document.querySelector('.modal-content');
+        modalContent.innerHTML = `
+          <div class="success-screen">
+            <div class="success-icon">
+              <i class="fas fa-check"></i>
+            </div>
+            <h3>Order Confirmed!</h3>
+            <p>Thank you for your purchase, <strong>${name}</strong>.<br>A confirmation email has been sent to <strong>${email}</strong>.<br>Order ID: <code>${order.id}</code></p>
+            <button onclick="closeCheckoutModal()">Close</button>
+          </div>
+        `;
+    } catch (e) {
+        console.error(e);
+        errorDiv.textContent = "Failed to place order. Please try again.";
+        errorDiv.style.display = "block";
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalBtnText;
+    }
+}
+
+// Init
+initTheme();
 renderCart();
 </script>
 </body>

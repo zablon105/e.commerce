@@ -6,6 +6,9 @@
   ],
   "routes": [
     { "src": "/api/(.*)", "dest": "/server/index.js" },
+    { "src": "/cart", "dest": "/public/cart.html" },
+    { "src": "/product", "dest": "/public/product.html" },
+    { "src": "/index", "dest": "/public/index.html" },
     { "src": "/(.*)", "dest": "/public/$1" }
   ]
 }
