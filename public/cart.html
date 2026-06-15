@@ -4,26 +4,37 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>e.commerce | Cart</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
 <link rel="stylesheet" href="css/style.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 </head>
-
 <body>
-<header class="navbar">
+<header class="site-header">
+  <div class="brand-group">
     <div class="logo">e.commerce</div>
-    <a class="back-link" href="index.html">← Back to Store</a>
+    <p class="brand-tag">Your cart summary</p>
+  </div>
+  <a class="back-link" href="index.html"><i class="fas fa-arrow-left"></i> Back to Store</a>
 </header>
-
-<section class="cart" id="cart-section">
-    <h2>Your Cart</h2>
-    <ul id="cart-items"></ul>
-    <h3>Total: Ksh <span id="total">0</span></h3>
+<main class="page-shell">
+  <section class="cart-panel page-panel">
+    <div class="section-title-row">
+      <div>
+        <h1>Shopping Cart</h1>
+        <p>Review your selections and prepare for checkout.</p>
+      </div>
+    </div>
+    <ul id="cart-items" class="cart-items"></ul>
     <div id="cart-empty" class="empty" hidden>No items in your cart yet.</div>
-</section>
-
+    <div class="cart-summary">
+      <span>Total</span>
+      <strong>Ksh <span id="total">0</span></strong>
+    </div>
+    <button class="checkout-btn" type="button">Proceed to Checkout</button>
+  </section>
+</main>
 <script>
 const currencyLabel = 'Ksh';
-const cart = JSON.parse(localStorage.getItem('cart')) || [];
+let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
 function renderCart(){
     const cartItemsEl = document.getElementById('cart-items');
@@ -43,17 +54,24 @@ function renderCart(){
     let total = 0;
     cart.forEach(item => {
         const li = document.createElement('li');
-        const itemInfo = document.createElement('span');
-        itemInfo.textContent = `${item.name} x${item.quantity} - ${currencyLabel} ${item.price * item.quantity}`;
+        li.className = 'cart-item';
+
+        const info = document.createElement('div');
+        info.className = 'cart-item-info';
+        info.innerHTML = `<strong>${item.name}</strong><span>${currencyLabel} ${item.price} × ${item.quantity}</span>`;
+
+        const actions = document.createElement('div');
+        actions.className = 'cart-item-actions';
 
         const removeBtn = document.createElement('button');
-        removeBtn.innerHTML = '<i class="fa-solid fa-trash"></i> Remove';
+        removeBtn.innerHTML = '<i class="fas fa-trash"></i> Remove';
         removeBtn.className = 'remove-cart-btn';
         removeBtn.type = 'button';
         removeBtn.onclick = () => removeFromCart(item.name);
 
-        li.appendChild(itemInfo);
-        li.appendChild(removeBtn);
+        actions.appendChild(removeBtn);
+        li.appendChild(info);
+        li.appendChild(actions);
         cartItemsEl.appendChild(li);
 
         total += item.price * item.quantity;
@@ -63,10 +81,7 @@ function renderCart(){
 }
 
 function removeFromCart(name){
-    const index = cart.findIndex(item => item.name === name);
-    if(index === -1) return;
-
-    cart.splice(index, 1);
+    cart = cart.filter(item => item.name !== name);
     localStorage.setItem('cart', JSON.stringify(cart));
     renderCart();
 }

@@ -4,49 +4,55 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>e.commerce | Product Detail</title>
-    <link rel="stylesheet" href="css/style.css">
-
-<header class="navbar">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="brand-group">
     <div class="logo">e.commerce</div>
-    <a class="back-link" href="index.html">← Back to Store</a>
+    <p class="brand-tag">Product detail</p>
+  </div>
+  <a class="back-link" href="index.html"><i class="fas fa-arrow-left"></i> Back to Store</a>
 </header>
-
-<section class="product-detail">
-    <img id="product-image" alt="Product image" loading="eager" onerror="this.src='/images/womens_handbag.jpg'">
-
-    <div class="product-info">
-        <h2 id="product-name"></h2>
-        <p id="product-category"></p>
-        <h3 class="product-price">Ksh <span id="product-price"></span></h3>
-        <p class="product-badge" id="product-badge">Premium selection</p>
-        <button class="add-to-cart-btn" onclick="addToCartFromDetail()">Add to Cart</button>
+<main class="page-shell">
+  <section class="product-detail-panel">
+    <div class="product-image-card">
+      <img id="product-image" alt="Product image" loading="eager" onerror="this.src='images/womens_handbag.jpg'">
     </div>
-</section>
-
+    <div class="product-info-panel">
+      <span class="eyebrow">Premium Selection</span>
+      <h1 id="product-name"></h1>
+      <p id="product-category" class="product-category"></p>
+      <div class="price-row">
+        <span class="price-label">Price</span>
+        <strong class="product-price">Ksh <span id="product-price"></span></strong>
+      </div>
+      <p class="product-copy">Experience elevated craftsmanship and refined design with this premium product.</p>
+      <button class="add-to-cart-btn" onclick="addToCartFromDetail()"><i class="fas fa-cart-plus"></i> Add to cart</button>
+    </div>
+  </section>
+</main>
 <script>
-const product = JSON.parse(localStorage.getItem("selectedProduct")) || {name:'Unknown', price:0, category:'', image:'https://via.placeholder.com/300?text=No+Image'};
+const product = JSON.parse(localStorage.getItem('selectedProduct')) || {name:'Unknown', price:0, category:'', image:'images/womens_handbag.jpg'};
 
-document.getElementById("product-name").textContent = product.name;
-document.getElementById("product-price").textContent = product.price;
-document.getElementById("product-category").textContent = product.category ? `Category: ${product.category}` : '';
-document.getElementById("product-image").src = product.image;
-
-defaultCart = JSON.parse(localStorage.getItem("cart")) || [];
+document.getElementById('product-name').textContent = product.name;
+document.getElementById('product-price').textContent = product.price;
+document.getElementById('product-category').textContent = product.category ? `Category: ${product.category}` : '';
+document.getElementById('product-image').src = product.image;
 
 function addToCartFromDetail() {
-    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
     let item = cart.find(p => p.name === product.name);
 
     if(item){
         item.quantity++;
     } else {
-        cart.push({name: product.name, price: product.price, quantity:1});
+        cart.push({name: product.name, price: product.price, quantity: 1});
     }
-
-    localStorage.setItem("cart", JSON.stringify(cart));
-    alert("Added to cart!");
+    localStorage.setItem('cart', JSON.stringify(cart));
+    window.location.href = 'cart.html';
 }
 </script>
-
 </body>
 </html>

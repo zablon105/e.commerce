@@ -4,123 +4,152 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>e.commerce | Premium Merchandise</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
 <link rel="stylesheet" href="css/style.css">
 </head>
-
 <body>
-
-<header class="navbar">
+<header class="site-header">
+  <div class="brand-group">
     <div class="logo">e.commerce</div>
-
-    <label for="search-input">Search products</label>
-    <input id="search-input" type="text" placeholder="Search products..." class="search"
-        onkeyup="searchProducts(this.value)">
-
-    <div class="nav-right">
-        <button class="filter-btn active" data-gender="all" data-category="all" onclick="filterProducts('all','all')">All</button>
-        <button class="filter-btn" data-gender="female" data-category="all" onclick="filterProducts('female','all')">Female</button>
-        <button class="filter-btn" data-gender="male" data-category="all" onclick="filterProducts('male','all')">Male</button>
-        <button id="cart-button" type="button" class="cart-icon" onclick="scrollToCart()" aria-label="View cart, 0 items">
-            🛒 <span id="cart-count" aria-hidden="true">0</span>
-        </button>
+    <p class="brand-tag">Premium fashion & lifestyle essentials</p>
+  </div>
+  <div class="header-actions">
+    <div class="search-group">
+      <label for="search-input" class="sr-only">Search products</label>
+      <input id="search-input" type="text" placeholder="Search the collection" class="search" onkeyup="searchProducts(this.value)">
+      <button class="search-clear" type="button" onclick="document.getElementById('search-input').value=''; searchProducts('')" aria-label="Clear search"><i class="fas fa-times"></i></button>
     </div>
+    <button id="cart-button" type="button" class="cart-icon" onclick="scrollToCart()" aria-label="View cart, 0 items">
+      <i class="fas fa-shopping-cart"></i>
+      <span id="cart-count">0</span>
+    </button>
+  </div>
 </header>
-
 <main>
-
-<section class="hero">
-    <h1>Discover Premium Fashion & Lifestyle Essentials</h1>
-    <p>Explore curated footwear, bedding, handbags, and more with effortless shopping and secure checkout.</p>
-</section>
-
-<section class="categories">
-    <button class="category-btn active" data-gender="all" data-category="all" onclick="filterProducts('all','all')">All Products</button>
-    <button class="category-btn" data-gender="female" data-category="shoes" onclick="filterProducts('female','shoes')">Women's Footwear</button>
-    <button class="category-btn" data-gender="female" data-category="beddings" onclick="filterProducts('female','beddings')">Bedding Collection</button>
-    <button class="category-btn" data-gender="female" data-category="handbags" onclick="filterProducts('female','handbags')">Designer Handbags</button>
-    <button class="category-btn" data-gender="male" data-category="shoes" onclick="filterProducts('male','shoes')">Men's Footwear</button>
-</section>
-
-<section id="products" class="products"></section>
-
-<section id="upload-section" class="upload-section">
-    <h2>Manage Inventory</h2>
-    <div class="owner-access">
-        <p>Only the store owner may add or manage listings.</p>
-        <div class="owner-login">
-            <label for="owner-password">Owner passcode</label>
-            <input type="password" id="owner-password" placeholder="Owner passcode" class="input-field">
-            <button type="button" class="owner-btn" onclick="authenticateOwner()">Unlock Manager Access</button>
-            <button type="button" id="owner-signout" class="owner-btn owner-signout" onclick="signOutOwner()">Sign Out</button>
-        </div>
-        <p id="owner-status" class="owner-status">Not authenticated.</p>
+  <section class="hero-panel">
+    <div class="hero-copy">
+      <span class="eyebrow">Curated Collection</span>
+      <h1>Effortless shopping for elevated everyday style.</h1>
+      <p>Browse premium footwear, luxury bedding, and designer handbags crafted for a refined wardrobe.</p>
+      <div class="hero-actions">
+        <button class="category-btn active" data-gender="all" data-category="all" onclick="filterProducts('all','all')">All Products</button>
+        <button class="category-btn" data-gender="female" data-category="handbags" onclick="filterProducts('female','handbags')">Shop handbags</button>
+      </div>
     </div>
+    <div class="hero-visual">
+      <img src="images/womens_handbag.jpg" alt="Premium handbag" loading="eager">
+    </div>
+  </section>
+
+  <section class="product-filter-panel">
+    <div class="filter-head">
+      <h2>Explore collections</h2>
+      <p>Filter by category and gender for a tailored selection.</p>
+    </div>
+    <div class="filter-actions">
+      <button class="filter-btn active" data-gender="all" data-category="all" onclick="filterProducts('all','all')">All</button>
+      <button class="filter-btn" data-gender="female" data-category="all" onclick="filterProducts('female','all')">Female</button>
+      <button class="filter-btn" data-gender="male" data-category="all" onclick="filterProducts('male','all')">Male</button>
+      <button class="filter-btn" data-gender="female" data-category="shoes" onclick="filterProducts('female','shoes')">Women's Shoes</button>
+      <button class="filter-btn" data-gender="female" data-category="handbags" onclick="filterProducts('female','handbags')">Handbags</button>
+      <button class="filter-btn" data-gender="female" data-category="beddings" onclick="filterProducts('female','beddings')">Beddings</button>
+    </div>
+  </section>
+
+  <section id="products" class="product-grid"></section>
+
+  <section id="upload-section" class="owner-panel">
+    <div class="owner-panel-header">
+      <div>
+        <h2>Inventory control</h2>
+        <p>Owner-only access for adding or updating product listings.</p>
+      </div>
+      <div class="owner-login-row">
+        <label for="owner-password" class="sr-only">Owner passcode</label>
+        <input type="password" id="owner-password" placeholder="Owner passcode" class="input-field">
+        <button type="button" class="owner-btn" onclick="authenticateOwner()">Unlock</button>
+        <button type="button" id="owner-signout" class="owner-btn owner-signout" onclick="signOutOwner()">Sign Out</button>
+      </div>
+    </div>
+    <p id="owner-status" class="owner-status">Not authenticated.</p>
 
     <div id="owner-section" class="owner-section">
-        <div class="owner-management-header">
-            <h3>Inventory Management</h3>
-            <p>As owner, you can add new products and edit existing listings from the catalog below.</p>
+      <div class="owner-management-header">
+        <div>
+          <h3>Product listings</h3>
+          <p>Add new items or edit catalog content in real time.</p>
         </div>
-        <div class="upload-form">
-            <label for="upload-name">Item name</label>
-            <input type="text" id="upload-name" placeholder="Item name" class="input-field">
-            <label for="upload-price">Item price (Ksh)</label>
-            <input type="number" id="upload-price" placeholder="Price (Ksh, 850–2200)" class="input-field">
-            
-            <label for="upload-gender">Gender</label>
-            <select id="upload-gender" class="input-field">
-                <option value="female">Female</option>
-                <option value="male">Male</option>
-            </select>
-        
+      </div>
+      <form class="upload-form" onsubmit="event.preventDefault(); uploadItem()">
+        <label for="upload-name">Item name</label>
+        <input type="text" id="upload-name" placeholder="Item name" class="input-field">
+        <label for="upload-price">Item price (Ksh)</label>
+        <input type="number" id="upload-price" placeholder="850 - 2200" class="input-field">
+
+        <label for="upload-gender">Gender</label>
+        <select id="upload-gender" class="input-field">
+          <option value="female">Female</option>
+          <option value="male">Male</option>
+        </select>
+
         <label for="upload-category">Category</label>
         <select id="upload-category" class="input-field">
-            <option value="shoes">Shoes</option>
-            <option value="beddings">Beddings</option>
-            <option value="handbags">Handbags</option>
-            <option value="other">Other</option>
+          <option value="shoes">Shoes</option>
+          <option value="beddings">Beddings</option>
+          <option value="handbags">Handbags</option>
+          <option value="other">Other</option>
         </select>
-        
-        <label class="file-input">
-            📷 Choose Image
-            <input type="file" id="upload-image" accept="image/*" class="hidden-input">
+
+        <label class="file-input" for="upload-image">
+          <i class="fas fa-image"></i>
+          <span>Choose image</span>
+          <input type="file" id="upload-image" accept="image/*" class="hidden-input">
         </label>
-        <span id="file-name"></span>
-        
-        <button onclick="uploadItem()" class="upload-btn">Add Item</button>
-        <p id="upload-status" class="upload-status"></p>
-        <div class="csv-import">
-            <label for="csv-file" class="csv-label">Bulk import (CSV):</label>
-                <input type="file" id="csv-file" accept=".csv" class="input-field">
-            <button type="button" class="upload-btn" onclick="importCSV()">Import CSV</button>
-            <p id="csv-status" class="upload-status"></p>
+        <span id="file-name" class="file-note"></span>
+
+        <button class="upload-btn">Add item</button>
+      </form>
+      <div class="csv-import">
+        <div>
+          <label for="csv-file" class="csv-label">Bulk import</label>
+          <input type="file" id="csv-file" accept=".csv" class="input-field">
         </div>
-        </div>
-        
-        <h3 id="user-items-title" class="hidden-title">Your Listings</h3>
-        <div id="user-items" class="user-items"></div>
+        <button type="button" class="upload-btn" onclick="importCSV()">Import CSV</button>
+      </div>
+      <p id="csv-status" class="upload-status"></p>
+      <p id="upload-status" class="upload-status"></p>
+
+      <h3 id="user-items-title" class="user-listing-title">Your Listings</h3>
+      <div id="user-items" class="user-items"></div>
     </div>
-</section>
+  </section>
 
-<section id="cart" class="cart">
-    <h2>Your Cart</h2>
-    <ul id="cart-items"></ul>
-    <h3>Total: Ksh <span id="total">0</span></h3>
-</section>
+  <section id="cart" class="cart-panel">
+    <div class="section-title-row">
+      <h2>Your cart</h2>
+      <p>Review selected items before checkout.</p>
+    </div>
+    <ul id="cart-items" class="cart-items"></ul>
+    <div class="cart-summary">
+      <span>Total</span>
+      <strong>Ksh <span id="total">0</span></strong>
+    </div>
+  </section>
 
-<section id="feedback-section" class="feedback-section">
-    <h2>Customer Feedback</h2>
-    <p>Let us know how we can improve your shopping experience.</p>
+  <section id="feedback-section" class="feedback-panel">
+    <div class="section-title-row">
+      <div>
+        <h2>Customer feedback</h2>
+        <p>Share suggestions so we can improve the shopping experience.</p>
+      </div>
+    </div>
     <textarea id="feedback-message" class="feedback-input" placeholder="Type your feedback here..."></textarea>
-    <button type="button" class="upload-btn" onclick="submitFeedback()">Send Feedback</button>
+    <button type="button" class="upload-btn" onclick="submitFeedback()">Send feedback</button>
     <p id="feedback-status" class="feedback-status"></p>
-</section>
-
+  </section>
 </main>
 
-<script src="js/script.js"></script>
 <div id="toast-container" aria-live="polite"></div>
-<!-- script is loaded once after the toast container -->
-
+<script src="js/script.js"></script>
 </body>
 </html>
